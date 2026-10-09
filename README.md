@@ -124,7 +124,8 @@ Build a menu-driven RTC and scheduled device controller on the LPC2148, with PIN
 | P0.18 | EN |
 | 10 kΩ pot wiper | V0 (contrast) |
 
-<p align="center"><img width="1920" height="1280" alt="image" src="https://github.com/user-attachments/assets/6338d530-91fc-448d-8dc3-3173851a390b" />
+<p align="center"><img width="1280" height="853" alt="WhatsApp Image 2026-10-09 at 8 23 55 PM" src="https://github.com/user-attachments/assets/29d42a1f-81fb-4c99-a190-e19640b54b04" />
+
 
 
 </p>
@@ -136,7 +137,8 @@ Build a menu-driven RTC and scheduled device controller on the LPC2148, with PIN
 | P1.16 – P1.19 | Rows R0 – R3 |
 | P1.20 – P1.23 | Columns C0 – C3 |
 
-<p align="center"><img width="1920" height="1280" alt="image" src="https://github.com/user-attachments/assets/df0e1a6c-6e80-4c56-bd15-1601b5234ef4" alt="Keypad wiring"></p>
+<p align="center"><img width="1920" height="1280" alt="image" src="https://github.com/user-attachments/assets/34276540-5e3d-479c-a6f1-66eb8e315b62" />
+
 
 ### 3. Device output (active LOW)
 
@@ -160,7 +162,8 @@ The device turns ON when P0.4 goes LOW, so the LED is wired between 3.3 V and P0
 
 Reads HIGH normally. Pressing pulls P0.1 LOW and fires the interrupt.
 
-<p align="center"><img width="1920" height="1280" alt="image" src="https://github.com/user-attachments/assets/46d80691-60b9-4601-acdc-be3bca02f79b" />
+<p align="center"><img width="1280" height="853" alt="WhatsApp Image 2026-10-09 at 8 19 42 PM" src="https://github.com/user-attachments/assets/5b7709cc-7f94-4e6f-8cf5-f7dbd628b6ae" />
+
 
 </p>
 
