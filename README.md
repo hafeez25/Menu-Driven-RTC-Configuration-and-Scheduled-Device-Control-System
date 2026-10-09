@@ -124,7 +124,8 @@ Build a menu-driven RTC and scheduled device controller on the LPC2148, with PIN
 | P0.18 | EN |
 | 10 kΩ pot wiper | V0 (contrast) |
 
-<p align="center"><img width="1920" height="1280" alt="image" src="https://github.com/user-attachments/assets/b65d271a-f164-4563-a80c-87b8493d6911" />
+<p align="center"><img width="1920" height="1280" alt="image" src="https://github.com/user-attachments/assets/6338d530-91fc-448d-8dc3-3173851a390b" />
+
 
 </p>
 
@@ -146,7 +147,8 @@ The device turns ON when P0.4 goes LOW, so the LED is wired between 3.3 V and P0
 | P0.4 | Anode(+) of LED |
 | GND | Cathode(-) of LED |
 
-<p align="center"><img width="1824" height="1248" alt="image" src="https://github.com/user-attachments/assets/e9589ba9-d36a-4256-b5db-7559d88ed882" />
+<p align="center"><img width="1872" height="1264" alt="image" src="https://github.com/user-attachments/assets/77e5e405-aa9d-40a7-a302-f56b6ed5809c" />
+
 </p>
 
 ### 4. Config switch (EINT0)
@@ -158,7 +160,8 @@ The device turns ON when P0.4 goes LOW, so the LED is wired between 3.3 V and P0
 
 Reads HIGH normally. Pressing pulls P0.1 LOW and fires the interrupt.
 
-<p align="center"><img width="1920" height="1280" alt="image" src="https://github.com/user-attachments/assets/0c547ed8-a7c8-473a-8bef-e97d0f4fc452" />
+<p align="center"><img width="1920" height="1280" alt="image" src="https://github.com/user-attachments/assets/46d80691-60b9-4601-acdc-be3bca02f79b" />
+
 </p>
 
 ## 🏁Getting Started
