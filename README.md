@@ -120,9 +120,7 @@ Build a menu-driven RTC and scheduled device controller on the LPC2148, with PIN
 |---|---|
 | P0.8 – P0.15 | D0 – D7 |
 | P0.16 | RS |
-| P0.17 | RW |
 | P0.18 | EN |
-| 10 kΩ pot wiper | V0 (contrast) |
 
 <p align="center"><img width="1280" height="853" alt="WhatsApp Image 2026-10-09 at 8 23 55 PM" src="https://github.com/user-attachments/assets/29d42a1f-81fb-4c99-a190-e19640b54b04" />
 
@@ -137,7 +135,8 @@ Build a menu-driven RTC and scheduled device controller on the LPC2148, with PIN
 | P1.16 – P1.19 | Rows R0 – R3 |
 | P1.20 – P1.23 | Columns C0 – C3 |
 
-<p align="center"><img width="1920" height="1280" alt="image" src="https://github.com/user-attachments/assets/34276540-5e3d-479c-a6f1-66eb8e315b62" />
+<p align="center"><img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/bae1af7c-fab6-4aff-af00-8da086ad9ef9" />
+
 
 
 ### 3. Device output (active LOW)
