@@ -39,14 +39,46 @@ A 16×2 LCD shows the live date and time. A 4×4 keypad menu, **locked behind a 
 
 ## 🚀 At a Glance
 
-| | |
-|---|---|
-| **What it does** | Shows clock → PIN-protected setup → controls a device by schedule |
-| **Controller** | LPC2148 (ARM7TDMI-S, 60 MHz) with on-chip RTC |
-| **Input** | 4×4 keypad + 1 config push-button (EINT0) |
-| **Output** | 16×2 LCD + device output (active LOW) |
-| **Tools** | Embedded C · Keil µVision · Flash Magic |
-| **Code** | Multi-file: `main.c` + `rtc`, `KPM`, `LCD`, `eint`, `timer`, `iap`, `delay` drivers |
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <b>🧠 Controller</b><br/>
+      LPC2148 · ARM7TDMI-S<br/>
+      <sub>60 MHz · On-chip RTC</sub>
+    </td>
+    <td align="center" width="50%">
+      <b>⏰ Core Function</b><br/>
+      Real-Time Clock<br/>
+      <sub>PIN-protected scheduled device control</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>⌨️ Input</b><br/>
+      4×4 Matrix Keypad<br/>
+      <sub>Configuration push-button</sub>
+    </td>
+    <td align="center">
+      <b>📟 Output</b><br/>
+      16×2 LCD<br/>
+      <sub>Active-LOW device output</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>🛠️ Development Tools</b><br/>
+      Embedded C · Keil µVision<br/>
+      <sub>Flash Magic</sub>
+    </td>
+    <td align="center">
+      <b>📂 Firmware</b><br/>
+      Modular, multi-file codebase<br/>
+      <sub>RTC · KPM · LCD · EINT · Timer · IAP · Delay</sub>
+    </td>
+  </tr>
+</table>
+
+> **Project summary:** An LPC2148-based embedded system that displays the real-time clock, provides PIN-protected configuration through a keypad, and controls a device according to a programmed schedule.
 
 ## 🎯 Aim
 
@@ -96,67 +128,135 @@ Build a menu-driven RTC and scheduled device controller on the LPC2148, with PIN
 
 ## 📍 Pin Mapping
 
-| Function | Pin | Direction | Notes |
+### 📟 LCD Interface
+
+| Function | LPC2148 Pin | Direction | Description |
 |---|---|---|---|
-| LCD D0–D7 | P0.8 – P0.15 | Out | 8-bit parallel |
-| LCD RS | P0.16 | Out | Register select |
-| LCD RW | P0.17 | Out | Held LOW (write only) |
-| LCD EN | P0.18 | Out | Enable strobe |
-| Keypad rows R0–R3 | P1.16 – P1.19 | Out | Driven low one at a time |
-| Keypad columns C0–C3 | P1.20 – P1.23 | In | Read back during scan |
-| Config switch | P0.1 (EINT0) | In | Falling-edge interrupt |
-| Device output | P0.4 | Out | **LOW = ON, HIGH = OFF** |
+| Data D0–D7 | `P0.8–P0.15` | OUTPUT | 8-bit parallel data |
+| Register Select (RS) | `P0.16` | OUTPUT | Selects command or data |
+| Read/Write (RW) | `P0.17` | OUTPUT | LOW for write operation |
+| Enable (EN) | `P0.18` | OUTPUT | LCD enable signal |
+
+### ⌨️ 4×4 Keypad
+
+| Function | LPC2148 Pin | Direction | Description |
+|---|---|---|---|
+| Rows R0–R3 | `P1.16–P1.19` | OUTPUT | Scanned one row at a time |
+| Columns C0–C3 | `P1.20–P1.23` | INPUT | Read keypad press status |
+
+### 🔘 Configuration Switch
+
+| Function | LPC2148 Pin | Direction | Description |
+|---|---|---|---|
+| Config switch | `P0.1 (EINT0)` | INPUT | Falling-edge interrupt |
+
+### 💡 Device Output
+
+| Function | LPC2148 Pin | Direction | Logic |
+|---|---|---|---|
+| Device control / LED | `P0.4` | OUTPUT | 🔴 **LOW = ON** · HIGH = OFF |
+
+> ⚠️ **Important:** Verify these pins against your actual firmware and wiring before publishing. This mapping has potential conflicts if the LCD RS/EN pins are also assigned to keypad or interrupt functions elsewhere in the project.
 
 > ⚠️ **P0.14 is also the ISP-entry pin.** The LCD uses P0.14 as data line D6. Make sure the LCD does not hold P0.14 LOW while the board resets, or it will enter ISP mode instead of running your program.
 
 ## 🔌 Circuit Connections
 
-### 1. LCD (HD44780)
+### 1. 📟 LCD Interface (HD44780 — 16×2)
 
-| LPC2148 | LCD |
-|---|---|
-| P0.8 – P0.15 | D0 – D7 |
-| P0.16 | RS |
-| P0.18 | EN |
+| LPC2148 / Supply | LCD Pin | Description |
+|---|---|---|
+| `P0.8` | D0 | Data bit 0 |
+| `P0.9` | D1 | Data bit 1 |
+| `P0.10` | D2 | Data bit 2 |
+| `P0.11` | D3 | Data bit 3 |
+| `P0.12` | D4 | Data bit 4 |
+| `P0.13` | D5 | Data bit 5 |
+| `P0.14` | D6 | Data bit 6 |
+| `P0.15` | D7 | Data bit 7 |
+| `P0.16` | RS | Register Select |
+| `P0.17` | RW | Read/Write |
+| `P0.18` | EN | Enable |
+| GND | VSS | Ground |
+| +5V* | VDD | LCD power |
+| Potentiometer wiper | V0 / VEE | Contrast adjustment |
+| GND | R/W reference | Use only if RW is permanently grounded instead of controlled by a GPIO |
+
+**LCD wiring notes**
+- Configure the LCD for **8-bit mode**.
+- Connect `RW` to `P0.17` only if the firmware controls this pin; otherwise, connect it to GND for write-only operation.
+- Use a potentiometer (typically 10 kΩ) to adjust display contrast.
+- `+5V` is shown for a typical LCD module; verify its voltage requirements and ensure the LPC2148 GPIO voltage limits are respected.
+
 
 <p align="center"><img width="1280" height="853" alt="WhatsApp Image 2026-10-09 at 8 23 55 PM" src="https://github.com/user-attachments/assets/29d42a1f-81fb-4c99-a190-e19640b54b04" />
 
-
-
 </p>
 
-### 2. Keypad
+### 2. ⌨️ 4×4 Matrix Keypad
 
-| LPC2148 | Keypad |
-|---|---|
-| P1.16 – P1.19 | Rows R0 – R3 |
-| P1.20 – P1.23 | Columns C0 – C3 |
+| LPC2148 Pin | Keypad Connection | Direction | Function |
+|---|---|---|---|
+| `P1.16` | Row R0 | OUTPUT | Row scanning |
+| `P1.17` | Row R1 | OUTPUT | Row scanning |
+| `P1.18` | Row R2 | OUTPUT | Row scanning |
+| `P1.19` | Row R3 | OUTPUT | Row scanning |
+| `P1.20` | Column C0 | INPUT | Key detection |
+| `P1.21` | Column C1 | INPUT | Key detection |
+| `P1.22` | Column C2 | INPUT | Key detection |
+| `P1.23` | Column C3 | INPUT | Key detection |
 
+**Keypad working principle**
+- The controller activates one row at a time.
+- The column inputs are read to detect which key is pressed.
+- The row and column combination identifies the pressed key.
+
+> 💡 **Wiring tip:** Verify the keypad's row and column labels against its datasheet or pinout. Configure the GPIO pins correctly in your firmware and use suitable pull-up or pull-down settings for reliable key detection.
 <p align="center"><img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/bae1af7c-fab6-4aff-af00-8da086ad9ef9" />
 
+### 3. 💡 Device Output (Active LOW)
 
+The device output is **active LOW**: the LED turns ON when `P0.4 = LOW` and OFF when `P0.4 = HIGH`.
 
-### 3. Device output (active LOW)
+| Connection | LPC2148 / Component | Description |
+|---|---|---|
+| `P0.4` | LED cathode (−) | GPIO output; sinks current when LOW |
+| `GND` | LPC2148 GND | Common ground |
 
-The device turns ON when P0.4 goes LOW, so the LED is wired between 3.3 V and P0.4:
+**Logic table**
 
-| LPC2148 | Active Low Switch |
+| P0.4 State | LED Status |
 |---|---|
-| P0.4 | Anode(+) of LED |
-| GND | Cathode(-) of LED |
+| `LOW (0)` | 🟢 ON |
+| `HIGH (1)` | ⚫ OFF |
 
+> ⚠️ **Important:** Connect a suitable current-limiting resistor in series with the LED. Confirm that the GPIO sink current and total port current remain within the LPC2148 datasheet limits.
 <p align="center"><img width="1872" height="1264" alt="image" src="https://github.com/user-attachments/assets/77e5e405-aa9d-40a7-a302-f56b6ed5809c" />
 
 </p>
 
-### 4. Config switch (EINT0)
+### 4. 🔘 Configuration Switch (EINT0)
 
-| LPC2148 | Switch |
-|---|---|
-| P0.1 | One terminal |
-| GND | Other terminal |
+The configuration switch is **active LOW**. When pressed, it pulls `P0.1` LOW and triggers the configured falling-edge interrupt.
 
-Reads HIGH normally. Pressing pulls P0.1 LOW and fires the interrupt.
+| LPC2148 / Supply | Switch Connection | Description |
+|---|---|---|
+| `P0.1 (EINT0)` | One terminal | Interrupt input |
+| `GND` | Other terminal | Ground reference |
+
+**Switch operation**
+
+| Switch State | P0.1 Logic | Result |
+|---|---|---|
+| Released | `HIGH (1)` | Normal operation |
+| Pressed | `LOW (0)` | Falling-edge interrupt triggers |
+
+**Wiring notes**
+- Enable the appropriate internal pull-up, or add an external pull-up resistor to `3.3 V`.
+- Configure `P0.1` for the intended EINT function in the PINSEL registers.
+- Configure EINT0 for falling-edge detection and clear the interrupt flag in the interrupt handler.
+
+> ⚠️ **Important:** Ensure the firmware maps EINT0 to `P0.1` and does not configure that pin for another function.
 
 <p align="center"><img width="1280" height="853" alt="WhatsApp Image 2026-10-09 at 8 19 42 PM" src="https://github.com/user-attachments/assets/5b7709cc-7f94-4e6f-8cf5-f7dbd628b6ae" />
 
